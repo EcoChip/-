@@ -2,23 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Secuencia de imágenes y sonidos</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      width: 100%;
       background: #000;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-    img {
+    #mainImage {
       width: 100%;
       height: 100%;
       object-fit: cover;
       cursor: pointer;
+      aspect-ratio: 9 / 16;
     }
   </style>
 </head>
@@ -36,32 +38,27 @@ const sound1 = document.getElementById('sound1');
 const sound2 = document.getElementById('sound2');
 const sound3 = document.getElementById('sound3');
 
-mainImage.addEventListener('click', async () => {
-  // Intentar pantalla completa
-  if (document.documentElement.requestFullscreen) {
-    await document.documentElement.requestFullscreen();
-  } else if (document.documentElement.webkitRequestFullscreen) {
-    await document.documentElement.webkitRequestFullscreen();
-  }
-
-  // Cambiar a imagen 2 y reproducir sonido1
+mainImage.addEventListener('click', () => {
+  // Cambiar a imagen2 al instante
   mainImage.src = 'imagen2.jpg';
-  await sound1.play();
 
-  sound1.onended = async () => {
-    // Cambiar a imagen3 y reproducir sonido2
+  // Reproducir sonido1 al mismo tiempo que aparece imagen2
+  sound1.play();
+
+  // 2 segundos después de Imagen2, reproducir sonido2 (agua hirviendo)
+  setTimeout(() => {
+    sound2.play();
+  }, 2000);
+
+  // 5 segundos después de Imagen2, mostrar Imagen3
+  setTimeout(() => {
     mainImage.src = 'imagen3.jpg';
-    await sound2.play();
 
-    sound2.onended = async () => {
-      // Reproducir sonido3
-      await sound3.play();
-      // Espera 0.1 segundos antes de cambiar a imagen4
-      setTimeout(() => {
-        mainImage.src = 'imagen4.jpg';
-      }, 100);
-    };
-  };
+    // 0,1 segundos después, mostrar Imagen4 y quedarse fija
+    setTimeout(() => {
+      mainImage.src = 'imagen4.jpg';
+    }, 100);
+  }, 5000);
 });
 </script>
 
