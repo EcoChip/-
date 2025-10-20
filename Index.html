@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secuencia de imágenes y sonidos</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<img id="mainImage" src="imagen1.jpg" alt="Imagen inicial">
+
+<audio id="sound1" src="sonido1.mp3"></audio>
+<audio id="sound2" src="sonido2.mp3"></audio>
+<audio id="sound3" src="sonido3.mp3"></audio>
+
+<script>
+const mainImage = document.getElementById('mainImage');
+const sound1 = document.getElementById('sound1');
+const sound2 = document.getElementById('sound2');
+const sound3 = document.getElementById('sound3');
+
+mainImage.addEventListener('click', async () => {
+  // Intentar pantalla completa
+  if (document.documentElement.requestFullscreen) {
+    await document.documentElement.requestFullscreen();
+  } else if (document.documentElement.webkitRequestFullscreen) {
+    await document.documentElement.webkitRequestFullscreen();
+  }
+
+  // Cambiar a imagen 2 y reproducir sonido1
+  mainImage.src = 'imagen2.jpg';
+  await sound1.play();
+
+  sound1.onended = async () => {
+    // Cambiar a imagen3 y reproducir sonido2
+    mainImage.src = 'imagen3.jpg';
+    await sound2.play();
+
+    sound2.onended = async () => {
+      // Reproducir sonido3
+      await sound3.play();
+      // Espera 0.1 segundos antes de cambiar a imagen4
+      setTimeout(() => {
+        mainImage.src = 'imagen4.jpg';
+      }, 100);
+    };
+  };
+});
+</script>
+
+</body>
+</html>
